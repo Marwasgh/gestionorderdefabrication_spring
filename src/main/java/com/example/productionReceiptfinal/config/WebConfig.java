@@ -9,9 +9,9 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**") // autorise tous les endpoints
-                .allowedOrigins("http://localhost:4200") // origine du frontend Angular
-                .allowedMethods("*") // autorise tous les types de requêtes : GET, POST, PUT, DELETE...
-                .allowedHeaders("*") // autorise tous les headers
+                .allowedOrigins("http://localhost:4200")
+                .allowedMethods("*")
+                .allowedHeaders("*")
                 .allowCredentials(true); // autorise l’envoi de cookies ou headers d’authentification
     }
 }

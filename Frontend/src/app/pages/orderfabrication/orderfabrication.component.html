@@ -1,0 +1,83 @@
+<nb-card>
+  <nb-card-header>Liste des ordres de fabrication</nb-card-header>
+  <nb-card-body>
+    <button class="btn btn-success mb-3" (click)="showForm = !showForm">
+      + Ajouter un ordre
+    </button>
+
+    <div *ngIf="showForm">
+      <div class="form-group">
+        <label>Produit</label>
+        <select class="form-control" [(ngModel)]="selectedProduitId">
+          <option value="">-- Sélectionnez un produit --</option>
+          <option *ngFor="let produit of produits" [value]="produit.id">
+            {{ produit.nom }}
+          </option>
+        </select>
+      </div>
+
+      <div class="form-group mt-2">
+        <label>Quantité</label>
+        <input type="number" class="form-control" [(ngModel)]="quantite" />
+      </div>
+
+      <div class="form-group mt-2">
+        <label>Date</label>
+        <input type="date" class="form-control" [(ngModel)]="date" [min]="minDate" />
+      </div>
+
+      <div class="form-group mt-2">
+        <label>Machine</label>
+        <select class="form-control" [(ngModel)]="selectedMachineId">
+          <option value="">-- Sélectionnez une machine --</option>
+          <option *ngFor="let machine of machinesDisponibles" [value]="machine.id">
+            {{ machine.nom }}
+          </option>
+        </select>
+      </div>
+
+      <button class="btn btn-primary mt-3" (click)="creerOrdre()">Créer l'ordre</button>
+    </div>
+
+    <table class="table table-bordered table-striped mt-4">
+      <thead>
+        <tr>
+          <th>ID</th>
+          <th>Produit</th>
+          <th>Quantité</th>
+          <th>Date</th>
+          <th>Machine</th>
+          <th>État</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let ordre of ordres">
+          <td>{{ ordre.id }}</td>
+          <td>{{ ordre.produit?.nom }}</td>
+          <td>{{ ordre.quantite }}</td>
+          <td>{{ ordre.date }}</td>
+          <td>{{ ordre.machineAssignee?.nom }}</td>
+          <td>
+            <ng-container *ngIf="!modeEdition[ordre.id]; else editEtat">
+              {{ ordre.etat }}
+              <button class="btn btn-sm btn-link" (click)="activerEdition(ordre.id)">Modifier</button>
+            </ng-container>
+            <ng-template #editEtat>
+              <select [(ngModel)]="ordre.etat" (change)="modifierEtat(ordre.id, ordre.etat)">
+                <option *ngFor="let etat of etatsPossibles" [value]="etat">
+                  {{ etat }}
+                </option>
+              </select>
+            </ng-template>
+          </td>
+          <td>
+            <button class="btn btn-danger btn-sm" (click)="supprimerOrdre(ordre.id)">
+              Supprimer
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </nb-card-body>
+</nb-card>

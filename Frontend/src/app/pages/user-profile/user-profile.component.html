@@ -1,0 +1,46 @@
+<nb-card *ngIf="user" class="text-center custom-card">
+  <nb-card-header class="text-center">
+    <h3><nb-icon icon="person-outline"></nb-icon> Mon Profil</h3>
+  </nb-card-header>
+
+  <nb-card-body>
+    <nb-user
+      [name]="user.nom"
+      [email]="user.email"
+      [picture]="'https://i.pravatar.cc/150?img=8'"
+      size="large"
+      shape="round">
+    </nb-user>
+
+    <div class="profile-details mt-4">
+      <div *ngIf="!isEditing">
+        <p class="mb-3"><strong>👤 Nom :</strong> {{ user.nom }}</p>
+        <p class="mb-4"><strong>📧 Email :</strong> {{ user.email }}</p>
+
+        <button nbButton status="primary" size="small" (click)="editProfile()">
+          ✏️ Modifier
+        </button>
+      </div>
+
+      <div *ngIf="isEditing">
+        <div class="form-group mb-3">
+          <label><strong>👤 Nom</strong></label>
+          <input nbInput fullWidth [(ngModel)]="editedUser.nom" class="form-control mt-1" />
+        </div>
+        <div class="form-group mb-4">
+          <label><strong>📧 Email</strong></label>
+          <input nbInput fullWidth [(ngModel)]="editedUser.email" class="form-control mt-1"  disabled/>
+        </div>
+
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <button nbButton status="danger" size="small" (click)="cancelEdit()">
+            ❌ Annuler
+          </button>
+          <button nbButton status="success" size="small" (click)="saveChanges()">
+            💾 Enregistrer
+          </button>
+        </div>
+      </div>
+    </div>
+  </nb-card-body>
+</nb-card>

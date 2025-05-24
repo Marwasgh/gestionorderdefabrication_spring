@@ -1,0 +1,43 @@
+<h2 style="text-align: center; margin-bottom: 32px; font-size: 32px; color: #343a40;">Bienvenue au Dashboard</h2>
+
+<div style="display: flex; flex-wrap: wrap; gap: 16px; justify-content: center;">
+
+  <!-- Ordres -->
+  <div style="width: 300px; background-color: #28a745; color: white; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Orders Terminés</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.termine }}</p>
+  </div>
+
+  <div style="width: 300px; background-color: #ffc107; color: #212529; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Orders En Cours</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.enCours }}</p>
+  </div>
+
+  <div style="width: 300px; background-color: #17a2b8; color: white; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Orders En Attente</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.enAttente }}</p>
+  </div>
+
+  <div style="width: 300px; background-color: #6c757d; color: white; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Total Ordres</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.total }}</p>
+  </div>
+
+  <!-- Machines -->
+  <div style="width: 300px; background-color: #007bff; color: white; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Machines Disponibles</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.machinesDisponibles }}</p>
+  </div>
+
+  <div style="width: 300px; background-color: #fd7e14; color: white; padding: 16px; border-radius: 12px;
+              box-shadow: 0 4px 6px rgba(0,0,0,0.1); text-align: center;">
+    <h4>Machines en Maintenance</h4>
+    <p style="font-size: 26px; font-weight: bold;">{{ stats.machinesEnMaintenance }}</p>
+  </div>
+
+</div>

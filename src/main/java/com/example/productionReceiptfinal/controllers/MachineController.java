@@ -55,7 +55,6 @@ public class MachineController {
 
     @PutMapping("/{id}/etat")
     public ResponseEntity<?> updateMachineState(@PathVariable Long id, @RequestParam String newEtat) {
-        //reqestparam: request mil parametre ?newEtat=actif
         try {
             service.updateMachineState(id, newEtat);
             return ResponseEntity.ok("État de la machine mis à jour avec succès");

@@ -1,0 +1,99 @@
+<nb-layout>
+  <nb-layout-column>
+    <nb-card style="max-width: 500px; margin: 60px auto; padding: 20px;">
+      <nb-card-header>
+        <h2 style="text-align: center; font-size: 28px;">Créez un compte</h2>
+      </nb-card-header>
+
+      <nb-card-body>
+        <div *ngIf="errorMessage" style="color: red; margin-bottom: 10px;">
+          {{ errorMessage }}
+        </div>
+        <form (ngSubmit)="signup()" #form="ngForm">
+
+          <!-- Champ Nom -->
+          <div class="form-group" style="margin-bottom: 1.5rem; position: relative;">
+            <label for="name">Nom</label>
+            <nb-icon
+              icon="person-outline"
+              style="position: absolute; top: 38px; left: 12px; z-index: 1; color: #666;"
+            ></nb-icon>
+            <input
+              nbInput
+              fullWidth
+              id="nom"
+              name="nom"
+              type="text"
+              placeholder="Entrez votre nom"
+              [(ngModel)]="user.nom"
+              style="padding-left: 40px;"
+              required
+            />
+          </div>
+
+          <!-- Champ Email -->
+          <div class="form-group" style="margin-bottom: 1.5rem; position: relative;">
+            <label for="email">Adresse e-mail</label>
+            <nb-icon
+              icon="email-outline"
+              style="position: absolute; top: 38px; left: 12px; z-index: 1; color: #666;"
+            ></nb-icon>
+            <input
+              nbInput
+              fullWidth
+              id="email"
+              name="email"
+              type="email"
+              placeholder="Entrez votre adresse e-mail"
+              [(ngModel)]="user.email"
+              style="padding-left: 40px;"
+              required
+              #emailInput="ngModel"
+            />
+
+          </div>
+        <div *ngIf="emailInput.invalid && emailInput.touched" class="text-danger">
+            Veuillez saisir une adresse email valide.
+          </div>
+          <!-- Champ Mot de passe -->
+          <div class="form-group" style="margin-bottom: 2rem; position: relative;">
+            <label for="password">Mot de passe</label>
+            <nb-icon
+              icon="lock-outline"
+              style="position: absolute; top: 38px; left: 12px; z-index: 1; color: #666;"
+            ></nb-icon>
+            <input
+              nbInput
+              fullWidth
+              id="password"
+              name="password"
+              type="password"
+              placeholder="Entrez votre mot de passe"
+              [(ngModel)]="user.password"
+              style="padding-left: 40px;"
+              required
+            />
+          </div>
+
+          <!-- Bouton -->
+          <button
+            nbButton
+            status="primary"
+            type="submit"
+            [disabled]="loading"
+            fullWidth
+          >
+            <nb-icon icon="log-in-outline" style="margin-right: 8px;"></nb-icon>
+            Créer un compte
+          </button>
+        </form>
+         <div style="text-align: center; margin-top: 1.5rem;">
+        <span>Vous avez déjà un compte ? </span>
+        <a [routerLink]="['/login']" style="color: #3366ff; text-decoration: underline;">
+          Connectez-vous ici
+        </a>
+      </div>
+      </nb-card-body>
+    </nb-card>
+  </nb-layout-column>
+</nb-layout>

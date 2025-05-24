@@ -25,7 +25,7 @@ public class EmployeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Employe> getById(@PathVariable Long id) { //@PathVariable : récupère id de l’URL.
+    public ResponseEntity<Employe> getById(@PathVariable Long id) {
         return service.getById(id)
                 .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
