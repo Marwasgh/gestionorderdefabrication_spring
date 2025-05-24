@@ -74,6 +74,9 @@ public class UserService {
         user.setRole(request.getRole());
         return userRepository.save(user);
     }
+    public boolean existsByEmail(String email) {
+        return userRepository.existsByEmail(email);
+    }
 
     // Méthode pour authentifier un utilisateur
     public String signin(SigninRequest request) {
@@ -88,6 +91,20 @@ public class UserService {
         }
         return null;
     }
+    public String getEmailFromToken(String token) {
+        return jwtUtil.extractEmail(token);
+    }
 
+    public Optional<Utilisateur> getUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
+    public Utilisateur findById(Long id) {
+        return userRepository.findById(id).orElse(null);
+    }
+
+    public Utilisateur save(Utilisateur user) {
+        return userRepository.save(user);
+    }
 
 }

@@ -20,4 +20,9 @@ public class Employe {
     @JoinColumn(name = "machine_assignee")
     @JsonIgnoreProperties("employes") // Évite la boucle infinie
     private Machine machineAssignee;
+
+    @ManyToOne
+    @JoinColumn(name = "utilisateur_id")
+    private Utilisateur utilisateur;
+
 }

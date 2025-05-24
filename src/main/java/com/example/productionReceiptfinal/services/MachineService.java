@@ -4,6 +4,7 @@ import com.example.productionReceiptfinal.entities.Employe;
 import com.example.productionReceiptfinal.entities.Machine;
 import com.example.productionReceiptfinal.repositories.EmployeRepository;
 import com.example.productionReceiptfinal.repositories.MachineRepository;
+import com.example.productionReceiptfinal.repositories.OrdreFabricationRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,10 +15,11 @@ import java.util.Optional;
 public class MachineService {
     private final MachineRepository repository;
     private final EmployeRepository employeRepository;
-
-    public MachineService(MachineRepository repository, EmployeRepository employeRepository) {
+    private final OrdreFabricationRepository orderFabricationRepository;
+    public MachineService(MachineRepository repository, EmployeRepository employeRepository, OrdreFabricationRepository orderFabricationRepository) {
         this.repository = repository;
         this.employeRepository = employeRepository;
+        this.orderFabricationRepository = orderFabricationRepository;
     }
 
     public List<Machine> getAll() {
@@ -50,18 +52,24 @@ public class MachineService {
         if (machineOpt.isPresent()) {
             Machine machine = machineOpt.get();
 
-            // Désaffecter les employés avant de supprimer la machine
+            // Désaffecter les employés
             employeRepository.findByMachineAssignee(machine).forEach(employe -> {
                 employe.setMachineAssignee(null);
                 employeRepository.save(employe);
             });
 
+            // Gérer les commandes associées à cette machine
+            orderFabricationRepository.findByMachineAssignee(machine).forEach(order -> {
+               order.setMachineAssignee(null);      // si c’est juste un id Long
+                orderFabricationRepository.save(order);
+            });
+
+            // Supprimer la machine
             repository.deleteById(id);
         } else {
             throw new RuntimeException("Machine non trouvée");
         }
     }
-
 
     @Transactional
     public Machine updateMachineState(Long id, String newEtat) {

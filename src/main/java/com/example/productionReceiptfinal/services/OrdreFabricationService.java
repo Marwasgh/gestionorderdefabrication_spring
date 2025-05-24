@@ -3,13 +3,17 @@ package com.example.productionReceiptfinal.services;
 
 import com.example.productionReceiptfinal.entities.Machine;
 import com.example.productionReceiptfinal.entities.OrdreFabrication;
+import com.example.productionReceiptfinal.entities.Produit;
 import com.example.productionReceiptfinal.repositories.MachineRepository;
 import com.example.productionReceiptfinal.repositories.OrdreFabricationRepository;
+import com.example.productionReceiptfinal.repositories.ProduitRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,10 +23,12 @@ import java.util.stream.Collectors;
 public class OrdreFabricationService {
     private final OrdreFabricationRepository repository;
     private final MachineRepository machineRepository;
+    private  final ProduitRepository produitRepository;
 
-    public OrdreFabricationService(OrdreFabricationRepository repository,MachineRepository machineRepository) {
+    public OrdreFabricationService(OrdreFabricationRepository repository, MachineRepository machineRepository, ProduitRepository produitRepository) {
         this.repository = repository;
         this.machineRepository = machineRepository;
+        this.produitRepository = produitRepository;
     }
 
     public List<OrdreFabrication> getAll() {
@@ -33,14 +39,30 @@ public class OrdreFabricationService {
         return repository.findById(id);
     }
     public OrdreFabrication create(OrdreFabrication ordre) {
+        // Vérifier que la machine existe
         Optional<Machine> machineOpt = machineRepository.findById(ordre.getMachineAssignee().getId());
         if (!machineOpt.isPresent()) {
-            throw new RuntimeException("Machine non trouvée.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Machine non trouvée.");
         }
 
         Machine machine = machineOpt.get();
         if (!"Disponible".equals(machine.getEtat())) {
-            throw new RuntimeException("La machine est déjà affectée ou en maintenance.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "La machine est déjà affectée ou en maintenance.");
+        }
+
+        // Vérifier la quantité de produit disponible
+        Optional<Produit> produitOpt = produitRepository.findById(ordre.getProduit().getId());
+        if (!produitOpt.isPresent()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produit non trouvé.");
+        }
+
+        Produit produit = produitOpt.get();
+        if (produit.getStock() < ordre.getQuantite()) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST,
+                    "Quantité demandée (" + ordre.getQuantite() +
+                            ") supérieure à la quantité en stock (" + produit.getStock() + ")."
+            );
         }
 
         // Mettre à jour l'état de la machine
@@ -50,7 +72,6 @@ public class OrdreFabricationService {
         ordre.setMachineAssignee(machine);
         return repository.save(ordre);
     }
-
     public Optional<OrdreFabrication> update(Long id, OrdreFabrication ordre) {
         return repository.findById(id).map(existingOrdre -> {
             existingOrdre.setProjet(ordre.getProjet());

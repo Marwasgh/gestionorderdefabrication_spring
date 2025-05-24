@@ -58,7 +58,6 @@ public class OrdreFabricationController {
         return service.getMachinesDisponibles();
     }
 
-
     @PutMapping("/{id}/etat")
     public ResponseEntity<OrdreFabrication> updateEtatOrdre(
             @PathVariable Long id,
@@ -69,5 +68,4 @@ public class OrdreFabricationController {
         OrdreFabrication updatedOrdre = service.updateEtatOrdre(id, nouvelEtat);
         return ResponseEntity.ok(updatedOrdre);
     }
-
 }

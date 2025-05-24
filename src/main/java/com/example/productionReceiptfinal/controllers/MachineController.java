@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/machines")
@@ -54,6 +55,7 @@ public class MachineController {
 
     @PutMapping("/{id}/etat")
     public ResponseEntity<?> updateMachineState(@PathVariable Long id, @RequestParam String newEtat) {
+        //reqestparam: request mil parametre ?newEtat=actif
         try {
             service.updateMachineState(id, newEtat);
             return ResponseEntity.ok("État de la machine mis à jour avec succès");
@@ -66,6 +68,12 @@ public class MachineController {
     public ResponseEntity<List<Employe>> getEmployesNonAssignes() {
         List<Employe> employesNonAssignes = service.getEmployesNonAssignes();
         return ResponseEntity.ok(employesNonAssignes);
+    }
+    @GetMapping("/disponibles")
+    public List<Machine> getMachinesDisponibles() {
+        return service.getAll().stream()
+                .filter(m -> m.getEtat().equalsIgnoreCase("Disponible"))
+                .collect(Collectors.toList());
     }
 
 }
